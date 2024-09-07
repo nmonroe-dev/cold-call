@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cold Call Tracker</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f7f7f7;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        max-width: 1000px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        text-align: center;
+        color: #333;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      table,
+      th,
+      td {
+        border: 1px solid #ddd;
+      }
+      th,
+      td {
+        padding: 12px;
+        text-align: center;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+      .form-control {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      .btn {
+        padding: 10px 20px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .btn:hover {
+        background-color: #45a049;
+      }
+      .btn-delete {
+        background-color: #ff4d4d;
+      }
+      .btn-edit {
+        background-color: #ffa31a;
+      }
+      .btn-delete:hover {
+        background-color: #ff1a1a;
+      }
+      .btn-edit:hover {
+        background-color: #e68a00;
+      }
+      input[type="checkbox"] {
+        cursor: pointer;
+      }
+      .notes {
+        width: 90%;
+        padding: 8px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Cold Call Tracker</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Client's Name</th>
+            <th>Phone Number</th>
+            <th>Business Type</th>
+            <th>Picked Up</th>
+            <th>Didn't Pick Up</th>
+            <th>Rejected</th>
+            <th>Follow-Up</th>
+            <th>Notes</th>
+            <th>Edit</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody id="client-table">
+          <!-- Dynamic rows will be inserted here -->
+        </tbody>
+      </table>
+
+      <h3>Add New Client</h3>
+      <form id="client-form">
+        <input
+          type="text"
+          id="client-name"
+          class="form-control"
+          placeholder="Client's Name"
+          required
+        />
+        <input
+          type="text"
+          id="phone-number"
+          class="form-control"
+          placeholder="Phone Number"
+          required
+        />
+        <input
+          type="text"
+          id="business-type"
+          class="form-control"
+          placeholder="Business Type"
+          required
+        />
+        <button type="submit" class="btn">Add Client</button>
+      </form>
+    </div>
+
+    <script>
+      const clientForm = document.getElementById("client-form");
+      const clientTable = document.getElementById("client-table");
+
+      clientForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        addClient();
+      });
+
+      function addClient() {
+        const clientName = document.getElementById("client-name").value;
+        const phoneNumber = document.getElementById("phone-number").value;
+        const businessType = document.getElementById("business-type").value;
+
+        const row = document.createElement("tr");
+        row.innerHTML = `
+        <td>${clientName}</td>
+        <td>${phoneNumber}</td>
+        <td>${businessType}</td>
+        <td><input type="checkbox"></td>
+        <td><input type="checkbox"></td>
+        <td><input type="checkbox"></td>
+        <td><input type="checkbox"></td>
+        <td><input type="text" class="notes"></td>
+        <td><button class="btn btn-edit" onclick="editClient(this)">Edit</button></td>
+        <td><button class="btn btn-delete" onclick="deleteClient(this)">Delete</button></td>
+      `;
+        clientTable.appendChild(row);
+
+        clearForm();
+      }
+
+      function clearForm() {
+        document.getElementById("client-name").value = "";
+        document.getElementById("phone-number").value = "";
+        document.getElementById("business-type").value = "";
+      }
+
+      function editClient(button) {
+        const row = button.parentNode.parentNode;
+        const cells = row.getElementsByTagName("td");
+        const clientName = prompt("Edit Client's Name:", cells[0].innerText);
+        const phoneNumber = prompt("Edit Phone Number:", cells[1].innerText);
+        const businessType = prompt("Edit Business Type:", cells[2].innerText);
+
+        if (clientName !== null) cells[0].innerText = clientName;
+        if (phoneNumber !== null) cells[1].innerText = phoneNumber;
+        if (businessType !== null) cells[2].innerText = businessType;
+      }
+
+      function deleteClient(button) {
+        if (confirm("Are you sure you want to delete this client?")) {
+          const row = button.parentNode.parentNode;
+          row.remove();
+        }
+      }
+    </script>
+  </body>
+</html>
